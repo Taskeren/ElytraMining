@@ -15,3 +15,7 @@ Feel free to add to modpacks.
 
 This project uses template [ExampleMod1.7.10](https://github.com/GTNewHorizons/ExampleMod1.7.10) by GTNewHorizons,
 and is inspired by Thermal Foundation, which is used in Omnifactory that I loved to play.
+
+## External Links
+
+- [Modrinth](https://modrinth.com/mod/elytra-mining)

@@ -1,5 +1,6 @@
 package cn.elytra.mod.mining;
 
+import cn.elytra.mod.mining.block.FallingTorch;
 import cn.elytra.mod.mining.item.CubeMiningHammer;
 import cn.elytra.mod.mining.item.FlatMiningHammer;
 import cpw.mods.fml.common.event.*;
@@ -17,6 +18,9 @@ public class CommonProxy {
 		if(Config.enableCubeHammers) {
 			CubeMiningHammer.preInit();
 		}
+		if(Config.enableFallingTorch) {
+			FallingTorch.preInit();
+		}
 	}
 
 	// load "Do your mod setup. Build whatever data structures you care about. Register recipes."
@@ -26,6 +30,9 @@ public class CommonProxy {
 		}
 		if(Config.enableCubeHammers) {
 			CubeMiningHammer.init();
+		}
+		if(Config.enableFallingTorch) {
+			FallingTorch.init();
 		}
 	}
 

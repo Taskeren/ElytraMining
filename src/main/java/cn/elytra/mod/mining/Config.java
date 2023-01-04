@@ -9,6 +9,7 @@ public class Config {
 
 	public static boolean enableFlatHammers = true;
 	public static boolean enableCubeHammers = true;
+	public static boolean enableFallingTorch = true;
 
 	public static boolean canShovel = true;
 
@@ -22,6 +23,9 @@ public class Config {
 		Property propertyEnableCubeHammers =
 			configuration.get("general", "enableCubeHammers", true);
 		enableCubeHammers = propertyEnableCubeHammers.getBoolean();
+		Property propertyEnableFallingTorch =
+			configuration.get("general", "enableCubeHammers", true);
+		enableFallingTorch = propertyEnableFallingTorch.getBoolean();
 
 		Property propertyCanShovel =
 			configuration.get("general", "canShovel", true);

@@ -2,3 +2,4 @@ item.elytra_mining.iron_flat_hammer.name=Iron Flat Hammer (3x3)
 item.elytra_mining.diamond_flat_hammer.name=Diamond Flat Hammer (5x5)
 item.elytra_mining.iron_cube_hammer.name=Iron Cubic Hammer (3x3x3)
 item.elytra_mining.diamond_cube_hammer.name=Diamond Cubic Hammer (5x5x5)
+tile.elytra_mining.falling_torch.name=Falling Torch

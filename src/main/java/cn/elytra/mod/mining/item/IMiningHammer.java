@@ -8,6 +8,6 @@ import net.minecraft.item.ItemStack;
 
 public interface IMiningHammer {
 
-    ImmutableList<BlockPos> getMiningBlocks(ItemStack hammer, BlockPos pos, HitSide side, EntityPlayer player);
+	ImmutableList<BlockPos> getMiningBlocks(ItemStack hammer, BlockPos pos, HitSide side, EntityPlayer player);
 
 }

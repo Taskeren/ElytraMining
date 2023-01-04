@@ -1,75 +1,102 @@
 package cn.elytra.mod.mining.item;
 
+import cn.elytra.mod.mining.Config;
 import cn.elytra.mod.mining.util.BlockPos;
 import cn.elytra.mod.mining.util.HitSide;
-import cofh.core.item.tool.ItemHammerAdv;
+import cofh.core.item.tool.ItemToolAdv;
 import cofh.lib.util.helpers.BlockHelper;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemPickaxe;
+import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
-public abstract class MiningHammerBase extends ItemHammerAdv implements IMiningHammer {
+public abstract class MiningHammerBase extends ItemToolAdv implements IMiningHammer {
 
-    public MiningHammerBase(ToolMaterial toolMaterial) {
-        super(toolMaterial);
-        this.setCreativeTab(CreativeTabs.tabTools);
-    }
+	@SuppressWarnings("unchecked")
+	public MiningHammerBase(ToolMaterial toolMaterial) {
+		super(4.0F, toolMaterial);
+		this.setCreativeTab(CreativeTabs.tabTools);
 
-    @Override
-    public boolean onBlockStartBreak(ItemStack stack, int x, int y, int z, EntityPlayer player) {
+		this.addToolClass("pickaxe");
+		this.addToolClass("hammer");
+		this.effectiveBlocks.addAll(ItemPickaxe.field_150915_c);
+		this.effectiveMaterials.add(Material.iron);
+		this.effectiveMaterials.add(Material.anvil);
+		this.effectiveMaterials.add(Material.rock);
+		this.effectiveMaterials.add(Material.ice);
+		this.effectiveMaterials.add(Material.packedIce);
+		this.effectiveMaterials.add(Material.glass);
+		this.effectiveMaterials.add(Material.redstoneLight);
 
-        World world = player.worldObj;
-        Block block = world.getBlock(x, y, z);
+		if(Config.canShovel) {
+			this.addToolClass("shovel");
+			this.effectiveBlocks.addAll(ItemSpade.field_150916_c);
+			this.effectiveMaterials.add(Material.ground);
+			this.effectiveMaterials.add(Material.grass);
+			this.effectiveMaterials.add(Material.sand);
+			this.effectiveMaterials.add(Material.snow);
+			this.effectiveMaterials.add(Material.craftedSnow);
+			this.effectiveMaterials.add(Material.clay);
+		}
+	}
 
-        if(!canHarvestBlock(block, stack)) {
-            if(!player.capabilities.isCreativeMode) {
-                stack.damageItem(1, player);
-            }
-            return false;
-        }
-        boolean used = false;
+	@Override
+	public boolean onBlockStartBreak(ItemStack stack, int x, int y, int z, EntityPlayer player) {
 
-        float refStrength = ForgeHooks.blockStrength(block, player, world, x, y, z);
-        if(refStrength != 0.0D && canHarvestBlock(block, stack)) {
-            MovingObjectPosition pos = BlockHelper.getCurrentMovingObjectPosition(player, true);
-	        Block adjBlock;
-            float strength;
+		World world = player.worldObj;
+		Block block = world.getBlock(x, y, z);
 
-            int x2;
-            int y2;
-            int z2;
+		if(!canHarvestBlock(block, stack)) {
+			if(!player.capabilities.isCreativeMode) {
+				stack.damageItem(1, player);
+			}
+			return false;
+		}
+		boolean used = false;
 
-            // Mining changes
-            // Removed the CoFHCore logic for looping blocks.
-            // Making it more flexible to modify the range of mining blocks.
+		float refStrength = ForgeHooks.blockStrength(block, player, world, x, y, z);
+		if(refStrength != 0.0D && canHarvestBlock(block, stack)) {
+			MovingObjectPosition pos = BlockHelper.getCurrentMovingObjectPosition(player, true);
+			Block adjBlock;
+			float strength;
 
-            ImmutableList<BlockPos> breakingBlocks =
-                getMiningBlocks(stack, BlockPos.fromMovingObjectPosition(pos), HitSide.fromSideHit(pos.sideHit), player);
+			int x2;
+			int y2;
+			int z2;
 
-            for(BlockPos bp : breakingBlocks) {
-                x2 = bp.getX();
-                y2 = bp.getY();
-                z2 = bp.getZ();
+			// Mining changes
+			// Removed the CoFHCore logic for looping blocks.
+			// Making it more flexible to modify the range of mining blocks.
 
-                adjBlock = world.getBlock(x2, y2, z2);
-                strength = ForgeHooks.blockStrength(adjBlock, player, world, x2, y2, z2);
-                if(strength > 0f && refStrength / strength <= 10f) {
-                    used |= harvestBlock(world, x2, y2, z2, player);
-                }
-            }
+			ImmutableList<BlockPos> breakingBlocks =
+				getMiningBlocks(stack, BlockPos.fromMovingObjectPosition(pos), HitSide.fromSideHit(pos.sideHit), player);
 
-            // Mining changes end
+			for(BlockPos bp : breakingBlocks) {
+				x2 = bp.getX();
+				y2 = bp.getY();
+				z2 = bp.getZ();
 
-            if(used && !player.capabilities.isCreativeMode) {
-                stack.damageItem(1, player);
-            }
-        }
-        return true;
-    }
+				adjBlock = world.getBlock(x2, y2, z2);
+				strength = ForgeHooks.blockStrength(adjBlock, player, world, x2, y2, z2);
+				if(strength > 0f && refStrength / strength <= 10f) {
+					used |= harvestBlock(world, x2, y2, z2, player);
+				}
+			}
+
+			// Mining changes end
+
+			if(used && !player.capabilities.isCreativeMode) {
+				stack.damageItem(1, player);
+			}
+		}
+		return true;
+	}
 
 }

@@ -3,6 +3,7 @@ package cn.elytra.mod.mining.util;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.util.MovingObjectPosition;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,8 +60,9 @@ public class BlockPos {
 		return new BlockPos(reference.x + offsetX, reference.y + offsetY, reference.z + offsetZ);
 	}
 
-	public static BlockPos fromMovingObjectPosition(MovingObjectPosition mop) {
-		return new BlockPos(mop.blockX, mop.blockY, mop.blockZ);
+	@Nullable
+	public static BlockPos fromMovingObjectPosition(@Nullable MovingObjectPosition mop) {
+		return mop == null ? null : new BlockPos(mop.blockX, mop.blockY, mop.blockZ);
 	}
 
 	public static ImmutableList<BlockPos> range(BlockPos p1, BlockPos p2) {

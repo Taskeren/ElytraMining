@@ -75,8 +75,16 @@ public abstract class MiningHammerBase extends ItemToolAdv implements IMiningHam
 			// Removed the CoFHCore logic for looping blocks.
 			// Making it more flexible to modify the range of mining blocks.
 
+			BlockPos center = BlockPos.fromMovingObjectPosition(pos);
+			if(center == null) {
+				// fixes NPE
+				// when player destroyed a block and the server lags, the MovingObjectPosition can be null as player moved
+				// its target block to air (unreachable).
+				return false;
+			}
+
 			ImmutableList<BlockPos> breakingBlocks =
-				getMiningBlocks(stack, BlockPos.fromMovingObjectPosition(pos), HitSide.fromSideHit(pos.sideHit), player);
+				getMiningBlocks(stack, center, HitSide.fromSideHit(pos.sideHit), player);
 
 			for(BlockPos bp : breakingBlocks) {
 				x2 = bp.getX();
